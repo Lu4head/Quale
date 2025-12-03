@@ -1,0 +1,71 @@
+services:
+  # ==========================================
+  # POSTGRESQL (Banco Relacional)
+  # ==========================================
+  postgres:
+    image: postgres:15.15-trixie
+    container_name: quale_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: quale_postgres_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - chat-network
+
+  # PgAdmin (Interface Visual para o Postgres - Opcional mas recomendado)
+  pgadmin:
+    image: dpage/pgadmin4:9.10
+    container_name: quale_pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+    networks:
+      - chat-network
+
+  # ==========================================
+  # MONGODB (Banco NoSQL)
+  # ==========================================
+  mongo:
+    image: mongo:8.0.16-nanoserver-ltsc2022
+    container_name: quale_mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: quale_mongo_db
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - chat-network
+
+  # Mongo Express (Interface Visual para o Mongo - Opcional mas recomendado)
+  mongo-express:
+    image: mongo-express:1.0.2-20-alpine3.19
+    container_name: quale_mongo_express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
+    depends_on:
+      - mongo
+    networks:
+      - chat-network
+
+volumes:
+  postgres_data:
+  mongo_data:
+
+networks:
+  chat-network:
+    driver: bridge
