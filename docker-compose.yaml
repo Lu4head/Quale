@@ -1,9 +1,26 @@
 services:
   # ==========================================
+  # BACKEND (API Java Spring Boot)
+  # ==========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: quale_backend:latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - mongo
+    networks:
+      - chat-network
+    hostname: backend
+  # ==========================================
   # POSTGRESQL (Banco Relacional)
   # ==========================================
   postgres:
-    image: postgres:15.15-trixie
+    image: postgres:15.15
     container_name: quale_postgres
     ports:
       - "5432:5432"
@@ -15,10 +32,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - chat-network
+    hostname: postgres
 
   # PgAdmin (Interface Visual para o Postgres - Opcional mas recomendado)
   pgadmin:
-    image: dpage/pgadmin4:9.10
+    platform: 'linux/amd64'
+    image: dpage/pgadmin4:9.10.0
     container_name: quale_pgadmin
     ports:
       - "5050:80"
@@ -34,7 +53,7 @@ services:
   # MONGODB (Banco NoSQL)
   # ==========================================
   mongo:
-    image: mongo:8.0.16-nanoserver-ltsc2022
+    image: mongo:8.0.16
     container_name: quale_mongo
     ports:
       - "27017:27017"
@@ -46,6 +65,7 @@ services:
       - mongo_data:/data/db
     networks:
       - chat-network
+    hostname: mongo
 
   # Mongo Express (Interface Visual para o Mongo - Opcional mas recomendado)
   mongo-express:
@@ -56,7 +76,10 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: admin
-      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/?authSource=admin
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
     depends_on:
       - mongo
     networks:

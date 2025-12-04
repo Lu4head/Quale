@@ -1,4 +1,4 @@
-package com.br.quale;
+package br.com.quale;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
