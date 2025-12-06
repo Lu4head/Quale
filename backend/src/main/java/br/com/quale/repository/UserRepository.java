@@ -1,7 +1,6 @@
 package br.com.quale.repository;
 
-import br.com.quale.dto.UserReponseDTO;
-import br.com.quale.entity.Users;
+import br.com.quale.entity.User;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UsersRepository extends JpaRepository<@NonNull Users, @NonNull Long> {
-    Optional<Users> findByEmail(String email);
+public interface UserRepository extends JpaRepository<@NonNull User, @NonNull Long> {
+    Optional<User> findByEmail(String email);
 
-    Page<@NonNull Users> findAll(Pageable pageable);
+    Page<@NonNull User> findAll(Pageable pageable);
 }

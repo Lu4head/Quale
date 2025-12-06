@@ -1,6 +1,6 @@
 package br.com.quale.utils;
 
-import br.com.quale.entity.Users;
+import br.com.quale.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    private Users user;
+    private User user;
 
     public String getUserType() {
         return user.getUserType().name();

@@ -1,7 +1,7 @@
 package br.com.quale.utils;
 
-import br.com.quale.entity.Users;
-import br.com.quale.repository.UsersRepository;
+import br.com.quale.entity.User;
+import br.com.quale.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class JwtRequestFilterUtil extends OncePerRequestFilter{
 
     // Dependências
     private final JwtUtil jwtUtil;
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -41,7 +41,7 @@ public class JwtRequestFilterUtil extends OncePerRequestFilter{
         }
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            Users user = usersRepository.findByEmail(email).orElse(null);
+            User user = userRepository.findByEmail(email).orElse(null);
 
             if (user != null && jwtUtil.validateToken(jwt, user.getEmail())) {
                 UsernamePasswordAuthenticationToken authToken =
