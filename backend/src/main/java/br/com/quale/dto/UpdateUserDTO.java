@@ -12,25 +12,21 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserDTO {
+public class UpdateUserDTO {
 
-    @NotNull
     @Length(min=2, max=120)
     private String name;
 
     @Email
-    @NotNull
     private String email;
 
     @Telefone
-    @NotNull
     private String phoneNumber;
 
-    @NotNull
-    private String password;
+    private UserTypeEnum userType;
 
-    private UserTypeEnum userType = UserTypeEnum.DEFAULT;
+    private Boolean active;
 
-    private Boolean active = false;
+    private Boolean removeProfilePhoto = false;
 
 }

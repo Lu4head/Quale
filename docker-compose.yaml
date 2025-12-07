@@ -6,6 +6,11 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    volumes:
+      - ./backend/logs:/app/logs
+      - ./backend/uploads:/app/uploads
+    environment:
+      - QUALE_UPLOAD_DIR=/app/uploads
     image: quale_backend:latest
     ports:
       - "8080:8080"

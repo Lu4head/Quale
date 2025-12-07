@@ -3,14 +3,11 @@ package br.com.quale.service;
 import br.com.quale.dto.ChatResponseDTO;
 import br.com.quale.dto.CreateGroupChatDTO;
 import br.com.quale.entity.GroupChat;
-import br.com.quale.entity.MessageBucket;
 import br.com.quale.enums.ChatTypeEnum;
 import br.com.quale.repository.ChatRepository;
-import br.com.quale.repository.MessageBucketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.time.Instant;
 import java.util.List;
 

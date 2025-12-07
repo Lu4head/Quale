@@ -1,7 +1,16 @@
+server :
+  port: 8080
+
+# ==========================================
+# CONFIGURAÇÕES PERSONALIZADAS DA APLICAÇÃO
+# ==========================================
+quale:
+  upload-dir: ./uploads
+
 spring:
-  # ==========================================
+  # ===========================================
   # POSTGRESQL (Banco Relacional - Autenticação e Configurações)
-  # ==========================================
+  # ===========================================
   datasource:
     url: jdbc:postgresql://postgres:5432/quale_postgres_db
     username: admin
@@ -17,6 +26,14 @@ spring:
         format_sql: true
 
   # ==========================================
+  # UPLOAD DE ARQUIVOS
+  # ==========================================
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 55MB
+
+  # ==========================================
   # MONGODB (Banco Não Relacional - Chat, Mensagens, Grupos)
   # ==========================================
   mongodb:
@@ -24,18 +41,6 @@ spring:
     port: 27017
     database: quale_mongo_db
     uri: mongodb://admin:admin@mongo:27017/quale_mongo_db?authSource=admin
-
-# ==========================================
-# LOGS E DEBUG
-# ==========================================
-logging:
-  level:
-    org:
-      springframework:
-        data:
-          mongodb:
-            core:
-              MongoTemplate: DEBUG
 
 # ==========================================
 # SWAGGER (OpenAPI)

@@ -17,6 +17,9 @@ RUN groupadd -r appgroup && useradd -r -g appgroup app
 COPY --from=builder /workspace/target/*.jar /app/app.jar
 RUN chown app:appgroup /app/app.jar
 
+RUN mkdir -p /app/uploads /app/logs \
+    && chown -R app:appgroup /app
+
 USER app
 
 ENV JAVA_OPTS="-XX:+UseContainerSupport -Djava.security.egd=file:/dev/./urandom -Xms256m -Xmx512m"

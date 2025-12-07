@@ -13,14 +13,18 @@ public class UserReponseDTO {
     Long id;
     String name;
     String email;
+    String phoneNumber;
     Boolean active;
     UserTypeEnum userType;
+    String profilePhotoUrl;
 
     public UserReponseDTO(User user){
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
         this.active = user.getActive();
         this.userType = user.getUserType();
+        this.profilePhotoUrl = user.getProfilePhotoUrl();
     }
 }
