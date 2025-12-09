@@ -18,4 +18,13 @@ public class Message {
     private String content;
     private Instant timestamp;
     private MessageStatusEnum status;
+
+    public Message(MessageDTO messageDTO) {
+        this.msgId = messageDTO.getMsgId();
+        this.senderId = messageDTO.getSenderId();
+        this.type = messageDTO.getType();
+        this.content = messageDTO.getContent();
+        this.timestamp = Instant.now();
+        this.status = MessageStatusEnum.SENT;
+    }
 }

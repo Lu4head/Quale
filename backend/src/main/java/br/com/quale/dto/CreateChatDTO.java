@@ -1,6 +1,7 @@
 package br.com.quale.dto;
 
 import br.com.quale.enums.ChatTypeEnum;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateChatDTO {
     private ChatTypeEnum type;
+    @NotNull
     private List<Long> participantId;
 }
