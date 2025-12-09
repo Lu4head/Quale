@@ -27,25 +27,28 @@ public class MessageBucketRepositoryImpl implements MessageBucketRepositoryCusto
         // Busca um bucket desse chat que NÃO esteja cheio (count < 50)
         // Ordena pelo index decrescente para pegar o mais recente
         Query query = new Query(Criteria.where("chat_id").is(chatId)
-                .and("count").lt(BUCKET_SIZE));
+                .and("messagesCount").lt(BUCKET_SIZE));
         query.with(Sort.by(Sort.Direction.DESC, "bucket_index"));
         query.limit(1);
 
         Update update = new Update()
                 .push("history", message) // Adiciona ao array
-                .inc("count", 1)          // Incrementa contador atomicamente
+                .inc("messagesCount", 1)          // Incrementa contador atomicamente
                 .set("endDate", message.getTimestamp()); // Atualiza data final
 
+        MessageBucket updated = mongoTemplate.findAndModify(
+                query,
+                update,
+                org.springframework.data.mongodb.core.FindAndModifyOptions.options().returnNew(true),
+                MessageBucket.class
+        );
 
-        UpdateResult result = mongoTemplate.updateFirst(query, update, MessageBucket.class);
-
-        // 2. SE FALHAR (Result == 0), CRIA NOVO BUCKET
-        // Significa que não existe bucket ou o último está cheio (count >= 50)
-        if (result.getModifiedCount() == 0) {
+        // 2. SE NÃO HOUVE ATUALIZAÇÃO, CRIA UM NOVO BUCKET
+        if (updated == null) {
             createNewBucket(chatId, message);
         }
 
-        // 3. ATUALIZA A "LAST MESSAGE" NA COLEÇÃO CHATS (Para a Inbox)
+        // 3. ATUALIZA A "LAST MESSAGE" NA COLEÇÃO CHATS
         updateChatLastMessage(chatId, message);
     }
 

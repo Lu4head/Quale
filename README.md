@@ -1,13 +1,13 @@
 <div align="center">
 
-# 🧩 Qualé – Chat APP
+# 💬 Qualé – Chat APP
 
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.5-brightgreen)
 ![Flutter](https://img.shields.io/badge/Flutter-3.7.0-blue)
 
-**"Qualé" o aplicativo de chat que é pura brasilidade! 😎 **
+**"Qualé"** o aplicativo de chat que é pura brasilidade! 😎
 
 </div>
 

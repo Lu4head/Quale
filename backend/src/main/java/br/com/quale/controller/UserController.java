@@ -91,4 +91,21 @@ public class UserController {
         userService.addContactToUser(userId, contactId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @GetMapping("/{user_id}/contacts")
+    @Operation(summary = "Obter contatos de um usuário", description = "Retorna a lista de contatos de um usuário pelo seu ID.")
+    public ResponseEntity<List<UserReponseDTO>> getUserContacts(
+            @PathVariable("user_id") Long userId) {
+        List<UserReponseDTO> contacts = userService.getUserContacts(userId);
+        return ResponseEntity.ok(contacts);
+    }
+
+    @DeleteMapping("/{user_id}/contact/{contact_id}")
+    @Operation(summary = "Remover contato de um usuário", description = "Remove um contato existente de um usuário pelo ID do usuário e ID do contato.")
+    public ResponseEntity<Void> removeContactFromUser(
+            @PathVariable("user_id") Long userId,
+            @PathVariable("contact_id") Long contactId) {
+        userService.removeContactFromUser(userId, contactId);
+        return ResponseEntity.noContent().build();
+    }
 }

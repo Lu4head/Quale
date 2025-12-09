@@ -15,4 +15,7 @@ public interface ChatRepository extends MongoRepository<Chat, String> {
 
     @Query("{ 'type': 'GROUP', 'participantIds': ?0 }")
     List<GroupChat> findGroupsByUserId(Long userId);
+
+    // Verificar se um usuário participa de um chat
+    boolean existsByIdAndParticipantIdsContaining(String chatId, Long participantId);
 }

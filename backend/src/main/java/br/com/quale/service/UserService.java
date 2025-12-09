@@ -156,4 +156,24 @@ public class UserService {
         user.getContacts().add(contact);
         userRepository.save(user);
     }
+
+    public void removeContactFromUser(Long user_id, Long contact_id) {
+        User user = userRepository.findByIdWithContacts(user_id)
+                .orElseThrow(() -> new NoContentException("Usuário não encontrado com o ID: " + user_id));
+        User contact = userRepository.findById(contact_id)
+                .orElseThrow(() -> new NoContentException("Contato não encontrado com o ID: " + contact_id));
+        if (!user.getContacts().contains(contact)) {
+            throw new NoContentException("O usuário não está na lista de contatos.");
+        }
+        user.getContacts().remove(contact);
+        userRepository.save(user);
+    }
+
+    public List<UserReponseDTO> getUserContacts(Long user_id) {
+        User user = userRepository.findByIdWithContacts(user_id)
+                .orElseThrow(() -> new NoContentException("Usuário não encontrado com o ID: " + user_id));
+        return user.getContacts().stream()
+                .map(mapper::toResponse)
+                .toList();
+    }
 }

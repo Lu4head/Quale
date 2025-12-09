@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste STOMP</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        .box { border: 1px solid #ccc; padding: 10px; margin: 10px; width: 45%; float: left; }
+        #mensagens { height: 200px; overflow-y: scroll; border: 1px solid #eee; background: #f9f9f9; padding: 5px;}
+    </style>
+</head>
+<body>
+<h2>Simulador de Chat</h2>
+
+<div class="box">
+    <h3>Configuracao</h3>
+    <label>Token JWT:</label><br>
+    <input type="text" id="jwt" placeholder="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwidXNlclR5cGUiOiJBRE1JTiIsImlhdCI6MTc2NTMwMjM0NiwiZXhwIjoxNzY1MzM4MzQ2fQ.iJp1icoKje7ThIl2G9ePqljDGxXBj1yuuPKwu9x9bVk" style="width: 100%"><br><br>
+
+    <label>ID do Chat:</label><br>
+    <input type="text" id="chatId" value="693716981cfe8eb04acb1acf" style="width: 100%"><br><br>
+
+    <button onclick="conectar()">1. Conectar e Entrar na Sala</button>
+    <hr>
+    <label>Mensagem:</label>
+    <input type="text" id="msgContent" placeholder="Digite algo...">
+    <button onclick="enviar()">2. Enviar</button>
+</div>
+
+
+<div class="box">
+    <h3>Recebidas em Tempo Real:</h3>
+    <div id="mensagens"></div>
+</div>
+
+<script>
+    var stompClient = null;
+
+    function conectar() {
+        var socket = new SockJS('http://localhost:8080/ws-connect');
+        stompClient = Stomp.over(socket);
+
+        var token = document.getElementById('jwt').value;
+        var chatId = document.getElementById('chatId').value;
+
+        var headers = {};
+        if(token) {
+            headers['Authorization'] = 'Bearer ' + token;
+        }
+
+        stompClient.connect(headers, function (frame) {
+            console.log('Conectado: ' + frame);
+            logTela("--- Conectado ao WebSocket! ---");
+
+            // --- AQUI ESTÁ A MÁGICA DO RECEBIMENTO ---
+            // O backend envia para: /topic/chat/{chatId}
+            // Nós assinamos exatamente esse caminho.
+            stompClient.subscribe('/topic/chat/' + chatId, function (mensagemRecebida) {
+                // O corpo da mensagem vem como String JSON
+                var corpo = JSON.parse(mensagemRecebida.body);
+                mostrarMensagem(corpo);
+            });
+
+        }, function(error) {
+            console.log(error);
+            logTela("ERRO: " + error);
+        });
+    }
+
+    function enviar() {
+        var chatId = document.getElementById('chatId').value;
+        var conteudo = document.getElementById('msgContent').value;
+
+        // Envia para o destino de APLICAÇÃO (/app)
+        stompClient.send("/app/chat/" + chatId + "/send", {}, JSON.stringify({
+            'content': conteudo,
+            'senderId': 2
+        }));
+    }
+
+    function mostrarMensagem(msg) {
+        var area = document.getElementById("mensagens");
+        var p = document.createElement("p");
+        // Ajuste os campos abaixo conforme o JSON que sua API retorna (ex: msg.content, msg.texto)
+        p.innerText = "Mensagem:" + (msg.senderId || "Alguém") + ": " + msg.content;
+        p.style.borderBottom = "1px solid #ddd";
+        area.appendChild(p);
+        // Auto-scroll para baixo
+        area.scrollTop = area.scrollHeight;
+    }
+
+    function logTela(texto) {
+        var area = document.getElementById("mensagens");
+        area.innerHTML += "<p style='color: blue'><i>" + texto + "</i></p>";
+    }
+</script>
+</body>
+</html>
