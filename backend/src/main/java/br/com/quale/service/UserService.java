@@ -181,4 +181,8 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoContentException("Usuário não encontrado com o email: " + email));
     }
+
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,10 +47,22 @@ public class ChatService {
             groupImageUrl = fileStorageService.storeFile(file, "group-chats-images");
         }
 
+        for(Long participantId : groupChatData.getParticipantId()){
+            if(!userService.existsById(participantId)){
+                throw new IllegalArgumentException("Não existe um usuário com o ID: " + participantId);
+            }
+        }
+
         GroupChat groupChat = groupChatMapper.toEntity(groupChatData);
         groupChat.setCreatedAt(Instant.now());
         groupChat.setType(ChatTypeEnum.GROUP);
         groupChat.setGroupImageUrl(groupImageUrl);
+
+        // No futuro adicionar também o id do criador do grupo como participante obrigatório
+        groupChat.setParticipantIds(groupChatData.getParticipantId());
+
+        // No futuro adicionar também o id do criador do grupo como admin obrigatório
+        groupChat.setAdminIds(groupChatData.getParticipantId());
 
         GroupChat savedGroupChat = chatRepository.save(groupChat);
 
