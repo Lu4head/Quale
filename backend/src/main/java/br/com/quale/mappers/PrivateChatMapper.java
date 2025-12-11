@@ -2,7 +2,6 @@ package br.com.quale.mappers;
 
 import br.com.quale.dto.ChatResponseDTO;
 import br.com.quale.dto.CreateChatDTO;
-import br.com.quale.entity.Chat;
 import br.com.quale.entity.PrivateChat;
 import org.mapstruct.*;
 

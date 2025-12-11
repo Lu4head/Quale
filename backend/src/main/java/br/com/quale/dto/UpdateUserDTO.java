@@ -3,7 +3,6 @@ package br.com.quale.dto;
 import br.com.quale.enums.UserTypeEnum;
 import br.com.quale.validations.Telefone;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

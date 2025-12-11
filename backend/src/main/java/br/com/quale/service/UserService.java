@@ -10,7 +10,6 @@ import br.com.quale.exception.NoContentException;
 import br.com.quale.mappers.UserMapper;
 import br.com.quale.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

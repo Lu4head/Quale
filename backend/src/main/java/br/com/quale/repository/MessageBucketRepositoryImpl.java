@@ -4,7 +4,6 @@ import br.com.quale.dto.LastMessage;
 import br.com.quale.dto.Message;
 import br.com.quale.entity.Chat;
 import br.com.quale.entity.MessageBucket;
-import com.mongodb.client.result.UpdateResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
