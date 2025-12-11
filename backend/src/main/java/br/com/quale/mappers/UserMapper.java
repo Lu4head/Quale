@@ -15,6 +15,7 @@ public interface UserMapper {
     @Mapping(target = "lastLoginDate", ignore = true)
     @Mapping(target = "profilePhotoUrl", source = "photoUrl")
     @Mapping(target = "password", source = "hashedPassword")
+    @Mapping(target = "contacts", ignore = true)
     User toEntity(CreateUserDTO dto, String photoUrl, String hashedPassword);
 
     UserReponseDTO toResponse(User entity);
@@ -22,8 +23,10 @@ public interface UserMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)           // Nunca atualiza ID
     @Mapping(target = "createdAt", ignore = true)  // Nunca atualiza data de criação
+    @Mapping(target = "updatedAt", ignore = true)  // Data de atualização é atualizada automaticamente
     @Mapping(target = "lastLoginDate", ignore = true) // Nunca atualiza data de último login
     @Mapping(target = "profilePhotoUrl", ignore = true)      // Foto tratamos manualmente no service
-    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "password", ignore = true) // Senha é alterada por outro método específico
+    @Mapping(target = "contacts", ignore = true) // Contatos não são atualizados aqui
     void updateEntityFromDto(UpdateUserDTO dto, @MappingTarget User entity);
 }
